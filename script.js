@@ -224,3 +224,20 @@ document.querySelectorAll('[data-player]').forEach((player) => {
   syncTime();
   syncMute();
 });
+
+
+// YouTube portfolio embeds: keep the canonical /embed/ URL in sync with the
+// video ID declared in HTML. This avoids accidentally using a /shorts/ URL
+// inside the iframe and keeps mobile playback inline.
+document.querySelectorAll('iframe[data-youtube-video-id]').forEach((frame) => {
+  const videoId = frame.dataset.youtubeVideoId?.trim();
+  if (!videoId) return;
+
+  const canonicalSrc =
+    'https://www.youtube.com/embed/' + encodeURIComponent(videoId) +
+    '?playsinline=1&rel=0';
+
+  if (frame.getAttribute('src') !== canonicalSrc) {
+    frame.setAttribute('src', canonicalSrc);
+  }
+});
