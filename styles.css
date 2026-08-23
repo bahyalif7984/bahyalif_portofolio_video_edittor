@@ -790,3 +790,45 @@ html.force-mobile .sleep-featured .direct-compare{
   min-height:0 !important;
   height:auto !important;
 }
+
+
+/* =========================================================
+   MOBILE VIEWPORT RESCUE V2
+   Handles Chrome/Android when a touch phone is rendered with
+   a desktop-sized (~980px) layout viewport.
+   ========================================================= */
+html.desktop-mobile-request{
+  width:100% !important;
+  max-width:100% !important;
+  overflow-x:hidden !important;
+}
+
+html.desktop-mobile-request body{
+  width:var(--mobile-device-width, 100%) !important;
+  min-width:var(--mobile-device-width, 100%) !important;
+  max-width:var(--mobile-device-width, 100%) !important;
+  margin:0 !important;
+  zoom:var(--mobile-rescue-zoom, 1);
+  overflow-x:hidden !important;
+}
+
+html.desktop-mobile-request .site-header,
+html.desktop-mobile-request main,
+html.desktop-mobile-request .site-footer{
+  width:100% !important;
+  max-width:100% !important;
+}
+
+/* Touch-device fallback: apply critical mobile layout even when
+   width-based media queries do not fire because Desktop site is enabled. */
+@media (hover:none) and (pointer:coarse){
+  html.force-mobile .menu-toggle{display:block !important}
+  html.force-mobile .primary-nav{display:none !important}
+  html.force-mobile .primary-nav.open{display:flex !important}
+  html.force-mobile .hero-grid,
+  html.force-mobile .two-col,
+  html.force-mobile .contact-card,
+  html.force-mobile .service-grid,
+  html.force-mobile .project-grid,
+  html.force-mobile .workflow-grid{grid-template-columns:minmax(0,1fr) !important}
+}

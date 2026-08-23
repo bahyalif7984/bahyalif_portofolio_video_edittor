@@ -21,3 +21,17 @@ MOBILE LAYOUT FIX
 
 UPLOAD
 Replace index.html, styles.css, script.js, dan README.txt lalu git add . / commit / push.
+
+
+MOBILE LAYOUT FIX V2
+- Mempertahankan fix Email Me desktop/mobile.
+- Memaksa layout mobile pada perangkat sentuh walau Chrome meminta Desktop site.
+- Menormalkan desktop-sized viewport di HP supaya halaman tidak mengecil seperti desktop.
+- Cache busting styles.css dan script.js dinaikkan ke versi V2.
+
+Setelah replace file di root project:
+  git add .
+  git commit -m "Fix mobile viewport rendering v2"
+  git push origin main
+
+Sesudah deploy, buka ulang website di tab baru.
