@@ -75,3 +75,29 @@ if (brandHome) {
     }
   });
 }
+
+
+// Email button: Gmail Compose on desktop, default mail app on mobile/tablet.
+const emailButton = document.getElementById('email-me');
+if (emailButton) {
+  emailButton.addEventListener('click', (event) => {
+    const userAgentMobile = navigator.userAgentData?.mobile === true;
+    const mobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const iPadOS = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+    const isMobileDevice = userAgentMobile || mobileUserAgent || iPadOS;
+
+    // On phones/tablets, keep the mailto: link so Android/iOS can hand
+    // the message to Gmail, Outlook, Apple Mail, or the user's default mail app.
+    if (isMobileDevice) return;
+
+    // On desktop/laptop, open Gmail's web composer directly.
+    event.preventDefault();
+    const gmailComposeUrl =
+      'https://mail.google.com/mail/?view=cm&fs=1' +
+      '&to=' + encodeURIComponent('alifbahyfreelancer@gmail.com') +
+      '&su=' + encodeURIComponent('Project Inquiry') +
+      '&body=' + encodeURIComponent('Hi Bahy,\n\nI would like to discuss a project with you.');
+
+    window.open(gmailComposeUrl, '_blank', 'noopener,noreferrer');
+  });
+}
