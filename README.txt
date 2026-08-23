@@ -1,14 +1,24 @@
-GOOGLE DRIVE VIDEO MOCKUP FIX
+MUHAMAD BAHY ALIF — STATIC PORTFOLIO WEBSITE
 
-Perubahan utama:
-- Video Google Drive tetap menggunakan iframe /preview yang sama.
-- Mockup HP hanya membungkus player 9:16, tidak lagi memaksa rasio 9:18.6.
-- Decorative notch/layer lama dihapus agar tidak mengganggu player Google Drive.
-- Mobile: lebar mockup mengikuti sekitar 82% viewport, max 320px.
-- BEFORE / AFTER otomatis menjadi satu kolom di layar <= 640px.
-- Desktop tetap side-by-side.
+Files:
+- index.html
+- styles.css
+- script.js
+- assets/ (images + CV PDF)
 
-Cara pakai:
-1. Paling aman: cukup replace styles.css lama dengan styles.css di folder ini.
-2. Jangan ubah link Google Drive di index.html.
-3. Setelah upload, hard refresh Ctrl+F5 atau clear cache browser.
+GitHub Pages:
+1. Create a new public GitHub repository.
+2. Upload all files and folders from this package to the repository root.
+3. Open repository Settings > Pages.
+4. Choose Deploy from a branch, select main and / (root), then Save.
+5. After GitHub publishes the site, open the URL shown in the Pages section.
+
+No framework, build tool, or database is required.
+
+REVISION: Portfolio videos are embedded directly. The 72 Hours Without Sleep project preserves a side-by-side BEFORE/RAW and AFTER/FINAL comparison.
+
+MOBILE VIDEO FIX:
+- Portrait video frames now scale fluidly on phones.
+- Fixed mobile min-heights were overridden so video sections follow the actual player height.
+- BEFORE / AFTER comparison stacks vertically on mobile and stays centered.
+- Desktop layout is unchanged.
