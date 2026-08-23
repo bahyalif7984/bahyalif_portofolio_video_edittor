@@ -128,3 +128,99 @@ if (emailButton) {
     }
   });
 }
+
+
+// Custom portfolio video player.
+// Native browser/Google Drive controls are intentionally not used so the
+// interaction looks the same on desktop and mobile.
+function formatPortfolioTime(seconds) {
+  if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
+  const minutes = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+  return `${minutes}:${secs}`;
+}
+
+document.querySelectorAll('[data-player]').forEach((player) => {
+  const video = player.querySelector('.portfolio-video');
+  const centerPlay = player.querySelector('.video-center-play');
+  const toggle = player.querySelector('.video-toggle');
+  const progress = player.querySelector('.video-progress');
+  const time = player.querySelector('.video-time');
+  const mute = player.querySelector('.video-mute');
+  const errorBox = player.querySelector('.video-error');
+
+  if (!video || !centerPlay || !toggle || !progress || !mute) return;
+
+  const syncPlayState = () => {
+    const playing = !video.paused && !video.ended;
+    player.classList.toggle('is-playing', playing);
+    centerPlay.textContent = playing ? 'Ⅱ' : '▶';
+    centerPlay.setAttribute('aria-label', playing ? 'Pause video' : 'Play video');
+    toggle.textContent = playing ? 'Ⅱ' : '▶';
+    toggle.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+  };
+
+  const syncTime = () => {
+    const duration = Number.isFinite(video.duration) ? video.duration : 0;
+    const current = Number.isFinite(video.currentTime) ? video.currentTime : 0;
+    progress.value = duration > 0 ? Math.round((current / duration) * 1000) : 0;
+    if (time) time.textContent = `${formatPortfolioTime(current)} / ${formatPortfolioTime(duration)}`;
+  };
+
+  const syncMute = () => {
+    const muted = video.muted || video.volume === 0;
+    mute.textContent = muted ? '🔇' : '🔊';
+    mute.setAttribute('aria-label', muted ? 'Unmute' : 'Mute');
+  };
+
+  const togglePlayback = async () => {
+    if (video.paused || video.ended) {
+      // Keep only one portfolio video playing at a time.
+      document.querySelectorAll('.portfolio-video').forEach((other) => {
+        if (other !== video && !other.paused) other.pause();
+      });
+      try {
+        await video.play();
+      } catch (error) {
+        // A browser can still reject playback if its media policy blocks it.
+        syncPlayState();
+      }
+    } else {
+      video.pause();
+    }
+  };
+
+  centerPlay.addEventListener('click', togglePlayback);
+  toggle.addEventListener('click', togglePlayback);
+
+  // Clicking/tapping directly on the video also toggles playback.
+  video.addEventListener('click', togglePlayback);
+
+  progress.addEventListener('input', () => {
+    if (!Number.isFinite(video.duration) || video.duration <= 0) return;
+    video.currentTime = (Number(progress.value) / 1000) * video.duration;
+    syncTime();
+  });
+
+  mute.addEventListener('click', () => {
+    video.muted = !video.muted;
+    syncMute();
+  });
+
+  video.addEventListener('play', syncPlayState);
+  video.addEventListener('pause', syncPlayState);
+  video.addEventListener('ended', syncPlayState);
+  video.addEventListener('loadedmetadata', syncTime);
+  video.addEventListener('durationchange', syncTime);
+  video.addEventListener('timeupdate', syncTime);
+  video.addEventListener('volumechange', syncMute);
+
+  video.addEventListener('error', () => {
+    player.classList.add('has-error');
+    if (errorBox) errorBox.hidden = false;
+  });
+
+  syncPlayState();
+  syncTime();
+  syncMute();
+});

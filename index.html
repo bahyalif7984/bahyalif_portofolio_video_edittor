@@ -55,7 +55,7 @@
   <meta name="description" content="Portfolio of Muhamad Bahy Alif — Video Editor and Social Media Content Designer based in Indonesia.">
   <meta name="theme-color" content="#0b0f0d">
   <title>Muhamad Bahy Alif — Video Editor & Social Media Content Designer</title>
-  <link rel="stylesheet" href="styles.css?v=20260823-1247-v2">
+  <link rel="stylesheet" href="styles.css?v=20260823-1305-custom-video-v1">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -185,14 +185,34 @@
             <div class="project-media compare-media direct-compare" aria-label="Before and after video comparison">
               <div class="compare-panel">
                 <span>BEFORE · RAW</span>
-                <div class="direct-video-frame compare-player">
-                  <iframe src="https://drive.google.com/file/d/1zcB7K-yGpx3Gwvrnuo6wXbcyOVxrMISf/preview" title="Raw footage — 72 Hours Without Sleep" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                <div class="direct-video-frame compare-player custom-video-shell" data-player>
+                  <video class="portfolio-video" preload="metadata" playsinline webkit-playsinline poster="assets/sleep-raw.webp" data-fallback-url="https://drive.google.com/file/d/1zcB7K-yGpx3Gwvrnuo6wXbcyOVxrMISf/preview" aria-label="Raw footage — 72 Hours Without Sleep">
+                    <source src="https://drive.usercontent.google.com/download?id=1zcB7K-yGpx3Gwvrnuo6wXbcyOVxrMISf&amp;export=download&amp;confirm=t" type="video/mp4">
+                  </video>
+                  <button class="video-center-play" type="button" aria-label="Play video">▶</button>
+                  <div class="video-controls" aria-label="Video controls">
+                    <button class="video-control video-toggle" type="button" aria-label="Play">▶</button>
+                    <input class="video-progress" type="range" min="0" max="1000" value="0" step="1" aria-label="Video progress">
+                    <span class="video-time">0:00 / 0:00</span>
+                    <button class="video-control video-mute" type="button" aria-label="Mute">🔊</button>
+                  </div>
+                  <div class="video-error" hidden>Video could not be streamed here. <a href="https://drive.google.com/file/d/1zcB7K-yGpx3Gwvrnuo6wXbcyOVxrMISf/preview" target="_blank" rel="noopener">Open video ↗</a></div>
                 </div>
               </div>
               <div class="compare-panel">
                 <span>AFTER · FINAL</span>
-                <div class="direct-video-frame compare-player">
-                  <iframe src="https://drive.google.com/file/d/1AZY0ikoO0zmgMl7jOnnGUvngwzny9eWP/preview" title="Final edit — 72 Hours Without Sleep" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                <div class="direct-video-frame compare-player custom-video-shell" data-player>
+                  <video class="portfolio-video" preload="metadata" playsinline webkit-playsinline poster="assets/sleep-final.webp" data-fallback-url="https://drive.google.com/file/d/1AZY0ikoO0zmgMl7jOnnGUvngwzny9eWP/preview" aria-label="Final edit — 72 Hours Without Sleep">
+                    <source src="https://drive.usercontent.google.com/download?id=1AZY0ikoO0zmgMl7jOnnGUvngwzny9eWP&amp;export=download&amp;confirm=t" type="video/mp4">
+                  </video>
+                  <button class="video-center-play" type="button" aria-label="Play video">▶</button>
+                  <div class="video-controls" aria-label="Video controls">
+                    <button class="video-control video-toggle" type="button" aria-label="Play">▶</button>
+                    <input class="video-progress" type="range" min="0" max="1000" value="0" step="1" aria-label="Video progress">
+                    <span class="video-time">0:00 / 0:00</span>
+                    <button class="video-control video-mute" type="button" aria-label="Mute">🔊</button>
+                  </div>
+                  <div class="video-error" hidden>Video could not be streamed here. <a href="https://drive.google.com/file/d/1AZY0ikoO0zmgMl7jOnnGUvngwzny9eWP/preview" target="_blank" rel="noopener">Open video ↗</a></div>
                 </div>
               </div>
             </div>
@@ -206,8 +226,18 @@
 
           <article class="project-card reveal" data-category="video">
             <div class="project-media phone-media direct-video-media">
-              <div class="direct-video-frame">
-                <iframe src="https://drive.google.com/file/d/1OyLiy8uldvx9c1lIJJW6lbQCwfp0sh5U/preview" title="AI Health Explainer — Neck Pain" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+              <div class="direct-video-frame custom-video-shell" data-player>
+                <video class="portfolio-video" preload="metadata" playsinline webkit-playsinline poster="assets/neck-pain.webp" data-fallback-url="https://drive.google.com/file/d/1OyLiy8uldvx9c1lIJJW6lbQCwfp0sh5U/preview" aria-label="AI Health Explainer — Neck Pain">
+                  <source src="https://drive.usercontent.google.com/download?id=1OyLiy8uldvx9c1lIJJW6lbQCwfp0sh5U&amp;export=download&amp;confirm=t" type="video/mp4">
+                </video>
+                <button class="video-center-play" type="button" aria-label="Play video">▶</button>
+                <div class="video-controls" aria-label="Video controls">
+                  <button class="video-control video-toggle" type="button" aria-label="Play">▶</button>
+                  <input class="video-progress" type="range" min="0" max="1000" value="0" step="1" aria-label="Video progress">
+                  <span class="video-time">0:00 / 0:00</span>
+                  <button class="video-control video-mute" type="button" aria-label="Mute">🔊</button>
+                </div>
+                <div class="video-error" hidden>Video could not be streamed here. <a href="https://drive.google.com/file/d/1OyLiy8uldvx9c1lIJJW6lbQCwfp0sh5U/preview" target="_blank" rel="noopener">Open video ↗</a></div>
               </div>
             </div>
             <div class="project-body">
@@ -219,8 +249,18 @@
 
           <article class="project-card reveal" data-category="video">
             <div class="project-media phone-media dark-media direct-video-media">
-              <div class="direct-video-frame">
-                <iframe src="https://drive.google.com/file/d/1dyhBkcu5oGJuXFlLyhXRYaxLcgCQf_j6/preview" title="Affiliate Video Editing — SKMEI 9165" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+              <div class="direct-video-frame custom-video-shell" data-player>
+                <video class="portfolio-video" preload="metadata" playsinline webkit-playsinline poster="assets/affiliate-watch.webp" data-fallback-url="https://drive.google.com/file/d/1dyhBkcu5oGJuXFlLyhXRYaxLcgCQf_j6/preview" aria-label="Affiliate Video Editing — SKMEI 9165">
+                  <source src="https://drive.usercontent.google.com/download?id=1dyhBkcu5oGJuXFlLyhXRYaxLcgCQf_j6&amp;export=download&amp;confirm=t" type="video/mp4">
+                </video>
+                <button class="video-center-play" type="button" aria-label="Play video">▶</button>
+                <div class="video-controls" aria-label="Video controls">
+                  <button class="video-control video-toggle" type="button" aria-label="Play">▶</button>
+                  <input class="video-progress" type="range" min="0" max="1000" value="0" step="1" aria-label="Video progress">
+                  <span class="video-time">0:00 / 0:00</span>
+                  <button class="video-control video-mute" type="button" aria-label="Mute">🔊</button>
+                </div>
+                <div class="video-error" hidden>Video could not be streamed here. <a href="https://drive.google.com/file/d/1dyhBkcu5oGJuXFlLyhXRYaxLcgCQf_j6/preview" target="_blank" rel="noopener">Open video ↗</a></div>
               </div>
             </div>
             <div class="project-body">
@@ -315,6 +355,6 @@
     </div>
   </dialog>
 
-  <script src="script.js?v=20260823-1247-v2"></script>
+  <script src="script.js?v=20260823-1305-custom-video-v1"></script>
 </body>
 </html>

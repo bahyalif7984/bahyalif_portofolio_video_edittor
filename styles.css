@@ -832,3 +832,182 @@ html.desktop-mobile-request .site-footer{
   html.force-mobile .project-grid,
   html.force-mobile .workflow-grid{grid-template-columns:minmax(0,1fr) !important}
 }
+
+
+/* =========================================================
+   CUSTOM PORTFOLIO VIDEO PLAYER — consistent desktop/mobile UI
+   Replaces Google Drive iframe controls with our own HTML5 controls.
+   ========================================================= */
+.custom-video-shell{
+  position:relative !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  isolation:isolate;
+  background:#070908 !important;
+  border-radius:28px !important;
+  touch-action:manipulation;
+}
+
+.custom-video-shell .portfolio-video{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  display:block !important;
+  object-fit:cover !important;
+  background:#050505 !important;
+  border:0 !important;
+  border-radius:inherit !important;
+  z-index:1 !important;
+}
+
+.custom-video-shell .video-center-play{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:64px;
+  height:64px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,255,255,.45);
+  border-radius:999px;
+  background:rgba(9,12,10,.72);
+  color:#fff;
+  font-size:25px;
+  line-height:1;
+  padding:0 0 0 4px;
+  cursor:pointer;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  z-index:4;
+  transition:opacity .2s ease,transform .2s ease,background .2s ease;
+}
+
+.custom-video-shell .video-center-play:hover{
+  transform:translate(-50%,-50%) scale(1.06);
+  background:rgba(17,129,73,.92);
+}
+
+.custom-video-shell.is-playing .video-center-play{
+  opacity:0;
+  pointer-events:none;
+}
+
+.custom-video-shell .video-controls{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:5;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto auto;
+  align-items:center;
+  gap:8px;
+  padding:28px 10px 10px;
+  background:linear-gradient(to top,rgba(0,0,0,.82),rgba(0,0,0,0));
+  color:#fff;
+}
+
+.custom-video-shell .video-control{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  flex:0 0 auto;
+  border:0;
+  border-radius:999px;
+  background:rgba(0,0,0,.38);
+  color:#fff;
+  font-size:14px;
+  line-height:1;
+  cursor:pointer;
+}
+
+.custom-video-shell .video-control:focus-visible,
+.custom-video-shell .video-center-play:focus-visible,
+.custom-video-shell .video-progress:focus-visible{
+  outline:2px solid #fff;
+  outline-offset:2px;
+}
+
+.custom-video-shell .video-progress{
+  min-width:0;
+  width:100%;
+  accent-color:#21b769;
+  cursor:pointer;
+}
+
+.custom-video-shell .video-time{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.01em;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+
+.custom-video-shell .video-error{
+  position:absolute;
+  inset:0;
+  z-index:8;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:10px;
+  padding:28px;
+  text-align:center;
+  background:rgba(7,9,8,.92);
+  color:#fff;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.custom-video-shell .video-error[hidden]{
+  display:none !important;
+}
+
+.custom-video-shell .video-error a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.4);
+  border-radius:999px;
+  padding:9px 13px;
+  font-weight:850;
+  background:rgba(255,255,255,.08);
+}
+
+.custom-video-shell.has-error .video-controls,
+.custom-video-shell.has-error .video-center-play{
+  display:none !important;
+}
+
+/* The legacy iframe rules stay harmless, but the custom player itself owns
+   the full 9:16 surface on every device. */
+.custom-video-shell iframe{
+  display:none !important;
+}
+
+@media (max-width:640px){
+  .custom-video-shell .video-center-play{
+    width:58px;
+    height:58px;
+    font-size:22px;
+  }
+
+  .custom-video-shell .video-controls{
+    grid-template-columns:auto minmax(0,1fr) auto;
+    gap:7px;
+    padding:26px 8px 8px;
+  }
+
+  .custom-video-shell .video-time{
+    display:none;
+  }
+
+  .custom-video-shell .video-control{
+    width:32px;
+    height:32px;
+  }
+}
