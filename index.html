@@ -4,37 +4,49 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <script>
-    // Mobile viewport rescue. Chrome Android can optionally request a desktop
-    // viewport. We detect a real touch phone/tablet and force the mobile layout.
+    // Reversible mobile-layout rescue.
+    // Important: Chrome DevTools device emulation can temporarily make a desktop
+    // browser look like a phone. When emulation is closed, every rescue class and
+    // inline property is removed again so the desktop layout returns cleanly.
     (() => {
       const root = document.documentElement;
+      let resizeFrame = 0;
 
-      function applyMobileViewportRescue() {
+      const clearMobileRescue = () => {
+        root.classList.remove("force-mobile", "desktop-mobile-request");
+        root.style.removeProperty("--mobile-device-width");
+        root.style.removeProperty("--mobile-rescue-zoom");
+      };
+
+      const syncMobileLayout = () => {
         const ua = navigator.userAgent || "";
-        const uaMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+        const uaMobile = navigator.userAgentData?.mobile === true ||
+          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
         const touchDevice = navigator.maxTouchPoints > 0 || "ontouchstart" in window;
-        const sw = window.screen?.width || 9999;
-        const sh = window.screen?.height || 9999;
-        const portrait = !window.screen?.orientation?.type?.startsWith("landscape");
-        const physicalCssWidth = portrait ? Math.min(sw, sh) : Math.max(sw, sh);
-        const shortSide = Math.min(sw, sh);
-        const likelyPhoneTablet = uaMobile || (touchDevice && shortSide <= 900);
+        const sw = Number(window.screen?.width || 0);
+        const sh = Number(window.screen?.height || 0);
+        const shortSide = sw && sh ? Math.min(sw, sh) : 9999;
+        const physicalMobile = uaMobile || (touchDevice && shortSide <= 900);
 
-        if (!likelyPhoneTablet) return;
+        // Desktop again (including after closing DevTools responsive mode):
+        // fully undo the mobile rescue instead of leaving a sticky class behind.
+        if (!physicalMobile) {
+          clearMobileRescue();
+          return;
+        }
 
         root.classList.add("force-mobile");
 
-        // If the browser is serving a desktop-sized layout viewport (for example
-        // Chrome Android's Desktop site mode), normalize it back to the physical
-        // mobile CSS width. This keeps the page readable instead of shrinking an
-        // entire ~980px desktop canvas onto the phone screen.
         const layoutWidth = Math.max(
           root.clientWidth || 0,
           window.innerWidth || 0,
           window.visualViewport?.width || 0
         );
+        const physicalCssWidth = shortSide < 900 ? shortSide : 0;
 
-        if (physicalCssWidth > 0 && physicalCssWidth < 900 && layoutWidth > physicalCssWidth * 1.35) {
+        // Only use the desktop-site rescue on a real small touch screen whose
+        // layout viewport is much wider than its physical CSS width.
+        if (physicalCssWidth > 0 && layoutWidth > physicalCssWidth * 1.35) {
           const zoom = Math.min(3.5, Math.max(1, layoutWidth / physicalCssWidth));
           root.classList.add("desktop-mobile-request");
           root.style.setProperty("--mobile-device-width", physicalCssWidth + "px");
@@ -44,18 +56,24 @@
           root.style.removeProperty("--mobile-device-width");
           root.style.removeProperty("--mobile-rescue-zoom");
         }
-      }
+      };
 
-      applyMobileViewportRescue();
-      window.addEventListener("pageshow", applyMobileViewportRescue);
-      window.addEventListener("orientationchange", () => setTimeout(applyMobileViewportRescue, 80));
-      window.addEventListener("resize", () => requestAnimationFrame(applyMobileViewportRescue));
+      const scheduleSync = () => {
+        cancelAnimationFrame(resizeFrame);
+        resizeFrame = requestAnimationFrame(syncMobileLayout);
+      };
+
+      syncMobileLayout();
+      window.addEventListener("pageshow", syncMobileLayout);
+      window.addEventListener("resize", scheduleSync, { passive: true });
+      window.visualViewport?.addEventListener("resize", scheduleSync, { passive: true });
+      window.addEventListener("orientationchange", () => setTimeout(syncMobileLayout, 100));
     })();
   </script>
   <meta name="description" content="Portfolio of Muhamad Bahy Alif — Video Editor and Social Media Content Designer based in Indonesia.">
   <meta name="theme-color" content="#0b0f0d">
   <title>Muhamad Bahy Alif — Video Editor & Social Media Content Designer</title>
-  <link rel="stylesheet" href="styles.css?v=20260823-1352-youtube-after-test-v1">
+  <link rel="stylesheet" href="styles.css?v=20260823-1622-bg-unified-v4">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -185,18 +203,15 @@
             <div class="project-media compare-media direct-compare" aria-label="Before and after video comparison">
               <div class="compare-panel">
                 <span>BEFORE · RAW</span>
-                <div class="direct-video-frame compare-player custom-video-shell" data-player>
-                  <video class="portfolio-video" preload="metadata" playsinline webkit-playsinline poster="assets/sleep-raw.webp" data-fallback-url="https://drive.google.com/file/d/1zcB7K-yGpx3Gwvrnuo6wXbcyOVxrMISf/preview" aria-label="Raw footage — 72 Hours Without Sleep">
-                    <source src="https://drive.usercontent.google.com/download?id=1zcB7K-yGpx3Gwvrnuo6wXbcyOVxrMISf&amp;export=download&amp;confirm=t" type="video/mp4">
-                  </video>
-                  <button class="video-center-play" type="button" aria-label="Play video">▶</button>
-                  <div class="video-controls" aria-label="Video controls">
-                    <button class="video-control video-toggle" type="button" aria-label="Play">▶</button>
-                    <input class="video-progress" type="range" min="0" max="1000" value="0" step="1" aria-label="Video progress">
-                    <span class="video-time">0:00 / 0:00</span>
-                    <button class="video-control video-mute" type="button" aria-label="Mute">🔊</button>
-                  </div>
-                  <div class="video-error" hidden>Video could not be streamed here. <a href="https://drive.google.com/file/d/1zcB7K-yGpx3Gwvrnuo6wXbcyOVxrMISf/preview" target="_blank" rel="noopener">Open video ↗</a></div>
+                <div class="direct-video-frame compare-player youtube-embed-shell">
+                  <iframe
+                    src="https://www.youtube.com/embed/nc0iYeB88_E?playsinline=1&rel=0"
+                    title="Raw footage — 72 Hours Without Sleep" data-youtube-video-id="nc0iYeB88_E"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+                  </iframe>
                 </div>
               </div>
               <div class="compare-panel">
@@ -223,18 +238,15 @@
 
           <article class="project-card reveal" data-category="video">
             <div class="project-media phone-media direct-video-media">
-              <div class="direct-video-frame custom-video-shell" data-player>
-                <video class="portfolio-video" preload="metadata" playsinline webkit-playsinline poster="assets/neck-pain.webp" data-fallback-url="https://drive.google.com/file/d/1OyLiy8uldvx9c1lIJJW6lbQCwfp0sh5U/preview" aria-label="AI Health Explainer — Neck Pain">
-                  <source src="https://drive.usercontent.google.com/download?id=1OyLiy8uldvx9c1lIJJW6lbQCwfp0sh5U&amp;export=download&amp;confirm=t" type="video/mp4">
-                </video>
-                <button class="video-center-play" type="button" aria-label="Play video">▶</button>
-                <div class="video-controls" aria-label="Video controls">
-                  <button class="video-control video-toggle" type="button" aria-label="Play">▶</button>
-                  <input class="video-progress" type="range" min="0" max="1000" value="0" step="1" aria-label="Video progress">
-                  <span class="video-time">0:00 / 0:00</span>
-                  <button class="video-control video-mute" type="button" aria-label="Mute">🔊</button>
-                </div>
-                <div class="video-error" hidden>Video could not be streamed here. <a href="https://drive.google.com/file/d/1OyLiy8uldvx9c1lIJJW6lbQCwfp0sh5U/preview" target="_blank" rel="noopener">Open video ↗</a></div>
+              <div class="direct-video-frame youtube-embed-shell">
+                <iframe
+                  src="https://www.youtube.com/embed/bTmak8siM2g?playsinline=1&rel=0"
+                  title="AI Health Explainer — Neck Pain" data-youtube-video-id="bTmak8siM2g"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allowfullscreen>
+                </iframe>
               </div>
             </div>
             <div class="project-body">
@@ -245,19 +257,16 @@
           </article>
 
           <article class="project-card reveal" data-category="video">
-            <div class="project-media phone-media dark-media direct-video-media">
-              <div class="direct-video-frame custom-video-shell" data-player>
-                <video class="portfolio-video" preload="metadata" playsinline webkit-playsinline poster="assets/affiliate-watch.webp" data-fallback-url="https://drive.google.com/file/d/1dyhBkcu5oGJuXFlLyhXRYaxLcgCQf_j6/preview" aria-label="Affiliate Video Editing — SKMEI 9165">
-                  <source src="https://drive.usercontent.google.com/download?id=1dyhBkcu5oGJuXFlLyhXRYaxLcgCQf_j6&amp;export=download&amp;confirm=t" type="video/mp4">
-                </video>
-                <button class="video-center-play" type="button" aria-label="Play video">▶</button>
-                <div class="video-controls" aria-label="Video controls">
-                  <button class="video-control video-toggle" type="button" aria-label="Play">▶</button>
-                  <input class="video-progress" type="range" min="0" max="1000" value="0" step="1" aria-label="Video progress">
-                  <span class="video-time">0:00 / 0:00</span>
-                  <button class="video-control video-mute" type="button" aria-label="Mute">🔊</button>
-                </div>
-                <div class="video-error" hidden>Video could not be streamed here. <a href="https://drive.google.com/file/d/1dyhBkcu5oGJuXFlLyhXRYaxLcgCQf_j6/preview" target="_blank" rel="noopener">Open video ↗</a></div>
+            <div class="project-media phone-media direct-video-media">
+              <div class="direct-video-frame youtube-embed-shell">
+                <iframe
+                  src="https://www.youtube.com/embed/KW9vaiaJJBo?playsinline=1&rel=0"
+                  title="Affiliate Video Editing — SKMEI 9165" data-youtube-video-id="KW9vaiaJJBo"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allowfullscreen>
+                </iframe>
               </div>
             </div>
             <div class="project-body">
@@ -352,6 +361,6 @@
     </div>
   </dialog>
 
-  <script src="script.js?v=20260823-1456-youtube-after-final-v2"></script>
+  <script src="script.js?v=20260823-1622-bg-unified-v4"></script>
 </body>
 </html>

@@ -130,114 +130,56 @@ if (emailButton) {
 }
 
 
-// Custom portfolio video player.
-// Native browser/Google Drive controls are intentionally not used so the
-// interaction looks the same on desktop and mobile.
-function formatPortfolioTime(seconds) {
-  if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
-  const minutes = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
-  return `${minutes}:${secs}`;
-}
-
-document.querySelectorAll('[data-player]').forEach((player) => {
-  const video = player.querySelector('.portfolio-video');
-  const centerPlay = player.querySelector('.video-center-play');
-  const toggle = player.querySelector('.video-toggle');
-  const progress = player.querySelector('.video-progress');
-  const time = player.querySelector('.video-time');
-  const mute = player.querySelector('.video-mute');
-  const errorBox = player.querySelector('.video-error');
-
-  if (!video || !centerPlay || !toggle || !progress || !mute) return;
-
-  const syncPlayState = () => {
-    const playing = !video.paused && !video.ended;
-    player.classList.toggle('is-playing', playing);
-    centerPlay.textContent = playing ? 'Ⅱ' : '▶';
-    centerPlay.setAttribute('aria-label', playing ? 'Pause video' : 'Play video');
-    toggle.textContent = playing ? 'Ⅱ' : '▶';
-    toggle.setAttribute('aria-label', playing ? 'Pause' : 'Play');
-  };
-
-  const syncTime = () => {
-    const duration = Number.isFinite(video.duration) ? video.duration : 0;
-    const current = Number.isFinite(video.currentTime) ? video.currentTime : 0;
-    progress.value = duration > 0 ? Math.round((current / duration) * 1000) : 0;
-    if (time) time.textContent = `${formatPortfolioTime(current)} / ${formatPortfolioTime(duration)}`;
-  };
-
-  const syncMute = () => {
-    const muted = video.muted || video.volume === 0;
-    mute.textContent = muted ? '🔇' : '🔊';
-    mute.setAttribute('aria-label', muted ? 'Unmute' : 'Mute');
-  };
-
-  const togglePlayback = async () => {
-    if (video.paused || video.ended) {
-      // Keep only one portfolio video playing at a time.
-      document.querySelectorAll('.portfolio-video').forEach((other) => {
-        if (other !== video && !other.paused) other.pause();
-      });
-      try {
-        await video.play();
-      } catch (error) {
-        // A browser can still reject playback if its media policy blocks it.
-        syncPlayState();
-      }
-    } else {
-      video.pause();
-    }
-  };
-
-  centerPlay.addEventListener('click', togglePlayback);
-  toggle.addEventListener('click', togglePlayback);
-
-  // Clicking/tapping directly on the video also toggles playback.
-  video.addEventListener('click', togglePlayback);
-
-  progress.addEventListener('input', () => {
-    if (!Number.isFinite(video.duration) || video.duration <= 0) return;
-    video.currentTime = (Number(progress.value) / 1000) * video.duration;
-    syncTime();
-  });
-
-  mute.addEventListener('click', () => {
-    video.muted = !video.muted;
-    syncMute();
-  });
-
-  video.addEventListener('play', syncPlayState);
-  video.addEventListener('pause', syncPlayState);
-  video.addEventListener('ended', syncPlayState);
-  video.addEventListener('loadedmetadata', syncTime);
-  video.addEventListener('durationchange', syncTime);
-  video.addEventListener('timeupdate', syncTime);
-  video.addEventListener('volumechange', syncMute);
-
-  video.addEventListener('error', () => {
-    player.classList.add('has-error');
-    if (errorBox) errorBox.hidden = false;
-  });
-
-  syncPlayState();
-  syncTime();
-  syncMute();
-});
-
-
-// YouTube portfolio embeds: keep the canonical /embed/ URL in sync with the
-// video ID declared in HTML. This avoids accidentally using a /shorts/ URL
-// inside the iframe and keeps mobile playback inline.
+// YouTube portfolio embeds.
+// Every portfolio video uses the canonical /embed/ URL rather than /shorts/.
+// This keeps the 9:16 player consistent inside the portfolio on desktop/mobile.
 document.querySelectorAll('iframe[data-youtube-video-id]').forEach((frame) => {
   const videoId = frame.dataset.youtubeVideoId?.trim();
   if (!videoId) return;
 
+  const params = new URLSearchParams({
+    playsinline: '1',
+    rel: '0'
+  });
+
   const canonicalSrc =
     'https://www.youtube.com/embed/' + encodeURIComponent(videoId) +
-    '?playsinline=1&rel=0';
+    '?' + params.toString();
 
   if (frame.getAttribute('src') !== canonicalSrc) {
     frame.setAttribute('src', canonicalSrc);
   }
+
+  // Keep embeds lightweight and compatible with GitHub Pages / normal HTTPS hosts.
+  frame.loading = 'lazy';
+  frame.referrerPolicy = 'strict-origin-when-cross-origin';
 });
+
+
+// Desktop-layout recovery after DevTools responsive/device emulation.
+// The early <head> rescue owns normal detection; this is a defensive second pass
+// after the full app has loaded so stale mobile classes cannot survive on desktop.
+(() => {
+  const root = document.documentElement;
+  const clearStaleMobileMode = () => {
+    const ua = navigator.userAgent || '';
+    const uaMobile = navigator.userAgentData?.mobile === true ||
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    const sw = Number(window.screen?.width || 0);
+    const sh = Number(window.screen?.height || 0);
+    const shortSide = sw && sh ? Math.min(sw, sh) : 9999;
+    const touchSmall = navigator.maxTouchPoints > 0 && shortSide <= 900;
+
+    if (!uaMobile && !touchSmall && window.innerWidth > 900) {
+      root.classList.remove('force-mobile', 'desktop-mobile-request');
+      root.style.removeProperty('--mobile-device-width');
+      root.style.removeProperty('--mobile-rescue-zoom');
+      nav?.classList.remove('open');
+      menuToggle?.setAttribute('aria-expanded', 'false');
+    }
+  };
+
+  window.addEventListener('resize', clearStaleMobileMode, { passive: true });
+  window.addEventListener('pageshow', clearStaleMobileMode);
+  clearStaleMobileMode();
+})();
