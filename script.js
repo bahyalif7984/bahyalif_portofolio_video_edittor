@@ -75,3 +75,56 @@ if (brandHome) {
     }
   });
 }
+
+
+// Email button: Gmail Compose on desktop, native/default email app on mobile/tablet.
+// The HTML href remains a mailto: fallback, while this handler explicitly routes
+// mobile devices to mailto: and desktop/laptop browsers to Gmail Compose.
+const emailButton = document.getElementById('email-me');
+if (emailButton) {
+  const emailAddress = 'alifbahyfreelancer@gmail.com';
+  const emailSubject = 'Project Inquiry';
+  const emailBody = 'Hi Bahy,\n\nI would like to discuss a project with you.';
+
+  const mailtoUrl =
+    'mailto:' + emailAddress +
+    '?subject=' + encodeURIComponent(emailSubject) +
+    '&body=' + encodeURIComponent(emailBody);
+
+  const gmailComposeUrl =
+    'https://mail.google.com/mail/?view=cm&fs=1' +
+    '&to=' + encodeURIComponent(emailAddress) +
+    '&su=' + encodeURIComponent(emailSubject) +
+    '&body=' + encodeURIComponent(emailBody);
+
+  // Keep a working fallback even if JavaScript is blocked or fails to load.
+  emailButton.setAttribute('href', mailtoUrl);
+
+  emailButton.addEventListener('click', (event) => {
+    const userAgentMobile = navigator.userAgentData?.mobile === true;
+    const mobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const iPadOS = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+    const coarseSmallScreen =
+      window.matchMedia?.('(hover: none) and (pointer: coarse)').matches === true &&
+      Math.min(window.screen.width, window.screen.height) <= 1024;
+
+    const isMobileDevice = userAgentMobile || mobileUserAgent || iPadOS || coarseSmallScreen;
+
+    event.preventDefault();
+
+    if (isMobileDevice) {
+      // Force Android/iOS to hand the request to an installed/default email app.
+      // This avoids Gmail web opening only the Inbox on mobile browsers.
+      window.location.href = mailtoUrl;
+      return;
+    }
+
+    // Desktop/laptop: open Gmail web composer directly.
+    const popup = window.open(gmailComposeUrl, '_blank', 'noopener,noreferrer');
+
+    // If the browser blocks the new tab, fall back to the user's default email app.
+    if (!popup) {
+      window.location.href = mailtoUrl;
+    }
+  });
+}

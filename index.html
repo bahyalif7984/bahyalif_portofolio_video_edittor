@@ -2,11 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script>
+    // Force the responsive mobile layout on real phones/tablets, even when
+    // a mobile browser requests the page using a desktop-sized viewport.
+    (() => {
+      const ua = navigator.userAgent || "";
+      const uaMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+      const touchDevice = navigator.maxTouchPoints > 0 || "ontouchstart" in window;
+      const screenWidth = Math.min(window.screen?.width || 9999, window.screen?.height || 9999);
+      const screenLongSide = Math.max(window.screen?.width || 9999, window.screen?.height || 9999);
+
+      if (uaMobile || (touchDevice && screenWidth <= 900 && screenLongSide <= 1280)) {
+        document.documentElement.classList.add("force-mobile");
+      }
+    })();
+  </script>
   <meta name="description" content="Portfolio of Muhamad Bahy Alif — Video Editor and Social Media Content Designer based in Indonesia.">
   <meta name="theme-color" content="#0b0f0d">
   <title>Muhamad Bahy Alif — Video Editor & Social Media Content Designer</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20260823-1243">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -243,7 +258,7 @@
           <p>Tell me what you are creating and where it will be published. I can help shape it into clean, engaging, on-brand content.</p>
         </div>
         <div class="contact-actions">
-          <a class="btn btn-light" href="mailto:alifbahyfreelancer@gmail.com">Email Me</a>
+          <a id="email-me" class="btn btn-light" href="mailto:alifbahyfreelancer@gmail.com?subject=Project%20Inquiry&amp;body=Hi%20Bahy%2C%0A%0AI%20would%20like%20to%20discuss%20a%20project%20with%20you.">Email Me</a>
           <a class="btn btn-outline-light" href="https://wa.me/6281390081092" target="_blank" rel="noopener">WhatsApp</a>
           <a class="btn btn-outline-light" href="https://www.linkedin.com/in/muhamad-bahy-alif-98396115a/" target="_blank" rel="noopener">LinkedIn</a>
         </div>
@@ -266,6 +281,6 @@
     </div>
   </dialog>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=20260823-1243"></script>
 </body>
 </html>

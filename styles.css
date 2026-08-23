@@ -12,8 +12,8 @@
   --shadow:0 24px 70px rgba(0,0,0,.16);
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55;overflow-x:hidden}
+html{scroll-behavior:smooth;width:100%;max-width:100%;overflow-x:hidden}
+body{margin:0;width:100%;max-width:100%;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55;overflow-x:hidden}
 body.modal-open{overflow:hidden}
 a{color:inherit;text-decoration:none}
 button{font:inherit}
@@ -400,112 +400,393 @@ var(--paper);background-size:48px 48px}
   }
 }
 
-/* ========================================================================== 
-   Mobile video responsiveness fix
-   Keeps portrait portfolio videos proportional and prevents fixed-height
-   wrappers from creating overflow/oversized video sections on phones.
-   ========================================================================== */
-.project-card,
-.project-media,
-.direct-compare,
-.compare-panel,
-.direct-video-frame{
-  min-width:0;
+/* =========================================================
+   FINAL OVERRIDE — GOOGLE DRIVE PORTRAIT VIDEO PHONE MOCKUP
+   Google Drive iframe is the source of truth (9:16).
+   The phone shell only wraps the player and never resizes it
+   into a custom 9:18.6 device ratio.
+   ========================================================= */
+
+/* Use one clean phone shell around every Google Drive player. */
+.direct-video-frame,
+.compare-video-shell,
+.sleep-featured .compare-player{
+  position:relative !important;
+  display:block !important;
+  width:min(320px,72vw) !important;
+  max-width:100% !important;
+  aspect-ratio:9 / 16 !important;
+  height:auto !important;
+  padding:6px !important;
+  margin-inline:auto !important;
+  background:#0b0d0f !important;
+  border:1px solid rgba(255,255,255,.16) !important;
+  border-radius:30px !important;
+  overflow:hidden !important;
+  box-shadow:0 18px 38px rgba(0,0,0,.24) !important;
+  transform:none !important;
 }
 
-.direct-video-frame{
-  max-width:100%;
+/* Remove the old decorative notch/glass layers.
+   They were designed for a taller mockup and interfered with
+   the Google Drive player on narrow screens. */
+.direct-video-frame::before,
+.direct-video-frame::after,
+.compare-video-shell::before,
+.compare-video-shell::after,
+.sleep-featured .compare-player::before,
+.sleep-featured .compare-player::after{
+  content:none !important;
+  display:none !important;
 }
 
-@media (max-width:760px){
-  /* Let the video determine the section height instead of forcing 480-520px. */
-  .phone-media.direct-video-media{
-    min-height:0;
-    height:auto;
-    padding:28px 18px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-  }
-
-  /* Fluid portrait player: centered, never wider than its mobile card. */
-  .direct-video-frame,
-  .compare-video-shell{
-    width:min(100%,286px);
-    max-width:100%;
-    aspect-ratio:9 / 16;
-    padding:8px;
-    border-radius:30px;
-    flex:0 1 286px;
-  }
-
-  .direct-video-frame iframe,
-  .compare-video-shell iframe{
-    width:100%;
-    height:100%;
-    border-radius:23px;
-  }
-
-  .direct-video-frame::before,
-  .compare-video-shell::before{
-    top:5px;
-    width:66px;
-    height:12px;
-  }
-
-  .direct-video-frame::after,
-  .compare-video-shell::after{
-    inset:9px;
-    border-radius:22px;
-  }
-
-  /* Before/After becomes a clean vertical stack on mobile. */
-  .sleep-featured .direct-compare,
-  .direct-compare{
-    grid-template-columns:1fr !important;
-    min-height:0;
-    height:auto;
-  }
-
-  .sleep-featured .direct-compare .compare-panel,
-  .direct-compare .compare-panel{
-    min-height:0;
-    height:auto;
-    padding:54px 18px 28px;
-    overflow:hidden;
-  }
-
-  .sleep-featured .compare-player{
-    width:min(100%,286px);
-    max-width:100%;
-    margin-inline:auto;
-  }
-
-  .sleep-featured .direct-compare .compare-panel > span{
-    top:16px;
-    left:50%;
-    transform:translateX(-50%);
-    max-width:calc(100% - 28px);
-    white-space:nowrap;
-  }
-
+/* Google Drive player fills the usable phone screen exactly. */
+.direct-video-frame iframe,
+.compare-video-shell iframe,
+.sleep-featured .compare-player iframe{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  aspect-ratio:9 / 16 !important;
+  border:0 !important;
+  border-radius:24px !important;
+  background:#000 !important;
+  position:relative !important;
+  inset:auto !important;
+  z-index:1 !important;
 }
 
-@media (max-width:420px){
-  .phone-media.direct-video-media{
-    padding:22px 14px;
-  }
+/* The media area follows the player; no forced tall empty box. */
+.direct-video-media,
+.phone-media.direct-video-media{
+  min-height:0 !important;
+  height:auto !important;
+}
 
+.phone-media.direct-video-media{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:32px 24px !important;
+}
+
+/* BEFORE / AFTER desktop layout stays side-by-side. */
+.sleep-featured .direct-compare,
+.direct-compare{
+  min-height:0 !important;
+  height:auto !important;
+}
+
+.sleep-featured .direct-compare .compare-panel,
+.direct-compare .compare-panel{
+  min-width:0 !important;
+  min-height:0 !important;
+  height:auto !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:54px 24px 30px !important;
+}
+
+/* Tablet: let the video use more of the available width. */
+@media (max-width:900px){
   .direct-video-frame,
   .compare-video-shell,
   .sleep-featured .compare-player{
-    width:min(100%,260px);
-    flex-basis:260px;
+    width:min(320px,72vw) !important;
+  }
+}
+
+/* Mobile: Google Drive portrait player becomes the main visual.
+   No tiny fixed phone width. */
+@media (max-width:640px){
+  .direct-video-frame,
+  .compare-video-shell,
+  .sleep-featured .compare-player{
+    width:min(82vw,320px) !important;
+    max-width:calc(100vw - 44px) !important;
+    padding:5px !important;
+    border-radius:26px !important;
   }
 
-  .sleep-featured .direct-compare .compare-panel,
-  .direct-compare .compare-panel{
-    padding:50px 14px 24px;
+  .direct-video-frame iframe,
+  .compare-video-shell iframe,
+  .sleep-featured .compare-player iframe{
+    border-radius:21px !important;
   }
+
+  .phone-media.direct-video-media{
+    padding:22px 10px !important;
+  }
+
+  .direct-compare,
+  .sleep-featured .direct-compare{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:1px !important;
+    min-height:0 !important;
+    height:auto !important;
+  }
+
+  .direct-compare .compare-panel,
+  .sleep-featured .direct-compare .compare-panel{
+    min-height:0 !important;
+    height:auto !important;
+    padding:48px 10px 22px !important;
+  }
+
+  .sleep-featured .direct-compare .compare-panel > span,
+  .direct-compare .compare-panel > span{
+    top:14px !important;
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    white-space:nowrap !important;
+  }
+}
+
+/* Very narrow phones: still fill most of the viewport. */
+@media (max-width:360px){
+  .direct-video-frame,
+  .compare-video-shell,
+  .sleep-featured .compare-player{
+    width:min(84vw,292px) !important;
+    max-width:calc(100vw - 34px) !important;
+  }
+}
+
+
+/* =========================================================
+   FINAL MOBILE LAYOUT HARDENING
+   Keeps the site genuinely responsive on phones and tablets,
+   including browsers that request a desktop-sized viewport.
+   ========================================================= */
+
+/* Prevent grid/flex children from creating accidental page-wide overflow. */
+.hero-grid > *,
+.two-col > *,
+.contact-card > *,
+.service-grid > *,
+.project-grid > *,
+.workflow-grid > *{
+  min-width:0;
+  max-width:100%;
+}
+
+/* Standard mobile viewport. */
+@media (max-width:720px){
+  html,
+  body{
+    width:100% !important;
+    max-width:100% !important;
+    overflow-x:hidden !important;
+  }
+
+  .container{
+    width:calc(100% - 28px) !important;
+    max-width:100% !important;
+    margin-inline:auto !important;
+  }
+
+  .hero-grid,
+  .two-col,
+  .contact-card,
+  .service-grid,
+  .project-grid,
+  .workflow-grid{
+    grid-template-columns:minmax(0,1fr) !important;
+  }
+
+  .hero-grid{gap:30px !important}
+  .hero{min-height:auto !important;padding-top:78px !important}
+  .hero h1{font-size:clamp(48px,15vw,64px) !important;max-width:100% !important}
+  .hero-lead{font-size:17px !important;max-width:100% !important}
+  .hero-visual{min-height:450px !important;width:100% !important}
+  .profile-card{width:min(390px,78vw) !important;max-width:92% !important}
+
+  .section-heading,
+  .section-heading.compact,
+  .about-copy,
+  .tools-wrap,
+  .project-body{
+    width:100% !important;
+    max-width:100% !important;
+  }
+
+  .section-heading h2{font-size:clamp(36px,11vw,52px) !important;overflow-wrap:anywhere}
+  .contact-card h2{font-size:clamp(34px,10.5vw,48px) !important;overflow-wrap:anywhere}
+  .about-copy{font-size:16px !important}
+
+  .project-card.featured{
+    display:flex !important;
+    flex-direction:column !important;
+  }
+
+  .ticker{
+    width:100% !important;
+    max-width:100% !important;
+    overflow:hidden !important;
+    white-space:normal !important;
+  }
+
+  .ticker-track{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    white-space:normal !important;
+    justify-content:center !important;
+    flex-wrap:wrap !important;
+  }
+
+  .contact-card{
+    width:100% !important;
+    padding:34px 24px !important;
+    border-radius:24px !important;
+    gap:30px !important;
+  }
+
+  .contact-actions{
+    width:100% !important;
+    display:flex !important;
+    flex-direction:column !important;
+    flex-wrap:nowrap !important;
+  }
+
+  .contact-actions .btn{width:100% !important}
+
+  .site-footer,
+  .footer-inner{max-width:100% !important}
+}
+
+/*
+   Some Android browsers can request a desktop viewport while still running
+   on a small touch device. index.html adds .force-mobile in that situation.
+   The rules below deliberately mirror the normal <=720px layout.
+*/
+html.force-mobile,
+html.force-mobile body{
+  width:100% !important;
+  max-width:100% !important;
+  overflow-x:hidden !important;
+}
+
+html.force-mobile .container{
+  width:calc(100% - 28px) !important;
+  max-width:100% !important;
+  margin-inline:auto !important;
+}
+
+html.force-mobile .section-pad{padding:68px 0 !important}
+
+html.force-mobile .menu-toggle{display:block !important}
+html.force-mobile .primary-nav{
+  position:absolute !important;
+  left:14px !important;
+  right:14px !important;
+  top:70px !important;
+  width:auto !important;
+  max-width:none !important;
+  background:var(--ink) !important;
+  color:white !important;
+  border-radius:18px !important;
+  padding:18px !important;
+  display:none !important;
+  flex-direction:column !important;
+  align-items:stretch !important;
+  gap:6px !important;
+  box-shadow:var(--shadow) !important;
+}
+html.force-mobile .primary-nav.open{display:flex !important}
+html.force-mobile .primary-nav a{padding:12px 10px !important}
+
+html.force-mobile .hero-grid,
+html.force-mobile .two-col,
+html.force-mobile .contact-card,
+html.force-mobile .service-grid,
+html.force-mobile .project-grid,
+html.force-mobile .workflow-grid{
+  grid-template-columns:minmax(0,1fr) !important;
+}
+
+html.force-mobile .hero-grid{gap:30px !important}
+html.force-mobile .two-col{gap:38px !important}
+html.force-mobile .hero{min-height:auto !important;padding-top:78px !important}
+html.force-mobile .hero h1{font-size:clamp(48px,15vw,64px) !important;max-width:100% !important}
+html.force-mobile .hero-lead{font-size:17px !important;max-width:100% !important}
+html.force-mobile .hero-visual{min-height:450px !important;width:100% !important}
+html.force-mobile .profile-card{width:min(390px,78vw) !important;max-width:92% !important}
+html.force-mobile .floating-tag{font-size:10px !important;padding:8px 12px !important;box-shadow:5px 5px 0 var(--ink) !important}
+
+html.force-mobile .stats-grid,
+html.force-mobile .service-grid,
+html.force-mobile .project-grid,
+html.force-mobile .workflow-grid{
+  grid-template-columns:minmax(0,1fr) !important;
+}
+
+html.force-mobile .section-heading,
+html.force-mobile .section-heading.compact,
+html.force-mobile .about-copy,
+html.force-mobile .tools-wrap,
+html.force-mobile .project-body{
+  width:100% !important;
+  max-width:100% !important;
+}
+
+html.force-mobile .section-heading h2{font-size:clamp(36px,11vw,52px) !important;overflow-wrap:anywhere}
+html.force-mobile .contact-card h2{font-size:clamp(34px,10.5vw,48px) !important;overflow-wrap:anywhere}
+html.force-mobile .about-copy{font-size:16px !important}
+
+html.force-mobile .project-card.featured{
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+html.force-mobile .ticker{
+  width:100% !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  white-space:normal !important;
+}
+
+html.force-mobile .ticker-track{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  white-space:normal !important;
+  justify-content:center !important;
+  flex-wrap:wrap !important;
+}
+
+html.force-mobile .contact-card{
+  width:100% !important;
+  padding:34px 24px !important;
+  border-radius:24px !important;
+  gap:30px !important;
+}
+
+html.force-mobile .contact-actions{
+  width:100% !important;
+  display:flex !important;
+  flex-direction:column !important;
+  flex-wrap:nowrap !important;
+}
+html.force-mobile .contact-actions .btn{width:100% !important}
+html.force-mobile .footer-inner{flex-direction:column !important}
+
+/* Keep the portrait Google Drive players inside the phone viewport. */
+html.force-mobile .direct-video-frame,
+html.force-mobile .compare-video-shell,
+html.force-mobile .sleep-featured .compare-player{
+  width:min(82vw,320px) !important;
+  max-width:calc(100vw - 44px) !important;
+}
+
+html.force-mobile .direct-compare,
+html.force-mobile .sleep-featured .direct-compare{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) !important;
+  min-height:0 !important;
+  height:auto !important;
 }
