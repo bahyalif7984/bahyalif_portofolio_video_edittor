@@ -8,7 +8,7 @@
   <meta name="description" content="Portfolio of Muhamad Bahy Alif — Video Editor and Social Media Content Designer based in Indonesia.">
   <meta name="theme-color" content="#0b0f0d">
   <title>Muhamad Bahy Alif — Video Editor & Social Media Content Designer</title>
-  <link rel="stylesheet" href="styles.css?v=20260825-mobile-v10">
+  <link rel="stylesheet" href="styles.css?v=20260825-clean-player-v12">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -139,27 +139,25 @@
               <div class="compare-panel">
                 <span>BEFORE · RAW</span>
                 <div class="direct-video-frame compare-player youtube-embed-shell">
-                  <iframe
-                    src="https://drive.google.com/file/d/1zcB7K-yGpx3Gwvrnuo6wXbcyOVxrMISf/preview"
-                    title="Raw footage — 72 Hours Without Sleep" data-drive-file-id="1zcB7K-yGpx3Gwvrnuo6wXbcyOVxrMISf"
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen>
-                  </iframe>
+                  <button class="portfolio-video-launch" type="button"
+                    data-drive-file-id="1zcB7K-yGpx3Gwvrnuo6wXbcyOVxrMISf"
+                    data-video-title="Raw footage — 72 Hours Without Sleep"
+                    aria-label="Play Raw footage — 72 Hours Without Sleep">
+                  <img class="portfolio-video-poster" src="assets/video-posters/raw.webp" alt="Raw footage — 72 Hours Without Sleep thumbnail" loading="lazy">
+                  <span class="portfolio-play-icon" aria-hidden="true"></span>
+                </button>
                 </div>
               </div>
               <div class="compare-panel">
                 <span>AFTER · FINAL</span>
                 <div class="direct-video-frame compare-player youtube-embed-shell">
-                  <iframe
-                    src="https://drive.google.com/file/d/1AZY0ikoO0zmgMl7jOnnGUvngwzny9eWP/preview"
-                    title="Final edit — 72 Hours Without Sleep" data-drive-file-id="1AZY0ikoO0zmgMl7jOnnGUvngwzny9eWP"
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen>
-                  </iframe>
+                  <button class="portfolio-video-launch" type="button"
+                    data-drive-file-id="1AZY0ikoO0zmgMl7jOnnGUvngwzny9eWP"
+                    data-video-title="Final edit — 72 Hours Without Sleep"
+                    aria-label="Play Final edit — 72 Hours Without Sleep">
+                  <img class="portfolio-video-poster" src="assets/video-posters/final.webp" alt="Final edit — 72 Hours Without Sleep thumbnail" loading="lazy">
+                  <span class="portfolio-play-icon" aria-hidden="true"></span>
+                </button>
                 </div>
               </div>
             </div>
@@ -174,14 +172,13 @@
           <article class="project-card reveal" data-category="video">
             <div class="project-media phone-media direct-video-media">
               <div class="direct-video-frame youtube-embed-shell">
-                <iframe
-                  src="https://drive.google.com/file/d/1OyLiy8uldvx9c1lIJJW6lbQCwfp0sh5U/preview"
-                  title="AI Health Explainer — Neck Pain" data-drive-file-id="1OyLiy8uldvx9c1lIJJW6lbQCwfp0sh5U"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerpolicy="strict-origin-when-cross-origin"
-                  allowfullscreen>
-                </iframe>
+                <button class="portfolio-video-launch" type="button"
+                    data-drive-file-id="1OyLiy8uldvx9c1lIJJW6lbQCwfp0sh5U"
+                    data-video-title="AI Health Explainer — Neck Pain"
+                    aria-label="Play AI Health Explainer — Neck Pain">
+                  <img class="portfolio-video-poster" src="assets/video-posters/health.webp" alt="AI Health Explainer — Neck Pain thumbnail" loading="lazy">
+                  <span class="portfolio-play-icon" aria-hidden="true"></span>
+                </button>
               </div>
             </div>
             <div class="project-body">
@@ -194,14 +191,13 @@
           <article class="project-card reveal" data-category="video">
             <div class="project-media phone-media direct-video-media">
               <div class="direct-video-frame youtube-embed-shell">
-                <iframe
-                  src="https://drive.google.com/file/d/1dyhBkcu5oGJuXFlLyhXRYaxLcgCQf_j6/preview"
-                  title="Affiliate Video Editing — SKMEI 9165" data-drive-file-id="1dyhBkcu5oGJuXFlLyhXRYaxLcgCQf_j6"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerpolicy="strict-origin-when-cross-origin"
-                  allowfullscreen>
-                </iframe>
+                <button class="portfolio-video-launch" type="button"
+                    data-drive-file-id="1dyhBkcu5oGJuXFlLyhXRYaxLcgCQf_j6"
+                    data-video-title="Affiliate Video Editing — SKMEI 9165"
+                    aria-label="Play Affiliate Video Editing — SKMEI 9165">
+                  <img class="portfolio-video-poster" src="assets/video-posters/affiliate.webp" alt="Affiliate Video Editing — SKMEI 9165 thumbnail" loading="lazy">
+                  <span class="portfolio-play-icon" aria-hidden="true"></span>
+                </button>
               </div>
             </div>
             <div class="project-body">
@@ -288,6 +284,25 @@
     </div>
   </footer>
 
+  <dialog class="portfolio-video-modal" id="portfolio-video-modal" aria-labelledby="portfolio-video-modal-title">
+    <div class="portfolio-video-modal-card">
+      <div class="portfolio-video-modal-head">
+        <strong id="portfolio-video-modal-title">Portfolio video</strong>
+        <button class="portfolio-video-close" type="button" aria-label="Close video">×</button>
+      </div>
+      <div class="portfolio-video-modal-frame">
+        <iframe
+          id="portfolio-video-modal-iframe"
+          src=""
+          title="Portfolio video player"
+          allow="autoplay; fullscreen; picture-in-picture"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </dialog>
+
   <dialog class="media-modal image-modal" id="image-modal">
     <button class="modal-close" aria-label="Close image">×</button>
     <div class="image-modal-body">
@@ -296,6 +311,6 @@
     </div>
   </dialog>
 
-  <script src="script.js?v=20260825-mobile-v10"></script>
+  <script src="script.js?v=20260825-clean-player-v12"></script>
 </body>
 </html>

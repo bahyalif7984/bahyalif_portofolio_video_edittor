@@ -165,3 +165,49 @@ document.querySelectorAll('iframe[data-drive-file-id]').forEach((frame) => {
   window.addEventListener('pageshow', clearStaleMobileMode);
   clearStaleMobileMode();
 })();
+
+
+// V11 clean portfolio video player.
+// The phone mockups show a static poster and ONE play button.
+// Google Drive /preview is created only inside this large modal.
+const portfolioVideoModal = document.getElementById('portfolio-video-modal');
+const portfolioVideoFrame = document.getElementById('portfolio-video-modal-iframe');
+const portfolioVideoTitle = document.getElementById('portfolio-video-modal-title');
+const portfolioVideoClose = portfolioVideoModal?.querySelector('.portfolio-video-close');
+
+function openPortfolioVideo(button) {
+  if (!portfolioVideoModal || !portfolioVideoFrame) return;
+
+  const fileId = button.dataset.driveFileId;
+  const title = button.dataset.videoTitle || 'Portfolio video';
+  if (!fileId) return;
+
+  portfolioVideoTitle.textContent = title;
+  portfolioVideoFrame.title = title;
+  // autoplay=1 removes the need for another click on browsers that allow it.
+  // If the browser blocks autoplay, Google Drive simply shows its normal player in the modal.
+  portfolioVideoFrame.src = `https://drive.google.com/file/d/${fileId}/preview?autoplay=1`;
+
+  portfolioVideoModal.showModal();
+  document.body.classList.add('modal-open');
+}
+
+function closePortfolioVideo() {
+  if (!portfolioVideoModal || !portfolioVideoFrame) return;
+  portfolioVideoModal.close();
+  portfolioVideoFrame.src = '';
+  document.body.classList.remove('modal-open');
+}
+
+document.querySelectorAll('.portfolio-video-launch').forEach((button) => {
+  button.addEventListener('click', () => openPortfolioVideo(button));
+});
+
+portfolioVideoClose?.addEventListener('click', closePortfolioVideo);
+portfolioVideoModal?.addEventListener('click', (event) => {
+  if (event.target === portfolioVideoModal) closePortfolioVideo();
+});
+portfolioVideoModal?.addEventListener('cancel', (event) => {
+  event.preventDefault();
+  closePortfolioVideo();
+});

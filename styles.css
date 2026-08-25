@@ -734,3 +734,342 @@ svg{
     padding-right:20px !important;
   }
 }
+
+
+/* =========================================================
+   V11 — CLEAN PORTFOLIO VIDEO PLAYER
+   Mockup = static poster + ONE custom Play button.
+   Google Drive player opens only inside the modal.
+   ========================================================= */
+
+/* The existing 9:16 phone shell remains the exact visual viewport. */
+.direct-video-frame,
+.compare-video-shell,
+.sleep-featured .compare-player{
+  position:relative !important;
+  isolation:isolate !important;
+}
+
+.portfolio-video-launch{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  border:0;
+  border-radius:inherit;
+  overflow:hidden;
+  background:#000;
+  cursor:pointer;
+  appearance:none;
+  -webkit-appearance:none;
+  display:block;
+  z-index:1;
+}
+
+.portfolio-video-poster{
+  position:absolute;
+  inset:0;
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  object-fit:cover !important;
+  object-position:center center !important;
+  display:block;
+  border-radius:inherit;
+  transform:none !important;
+  transition:filter .2s ease, transform .2s ease;
+}
+
+.portfolio-video-launch::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.06));
+  pointer-events:none;
+  z-index:2;
+}
+
+.portfolio-play-icon{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:62px;
+  height:62px;
+  border-radius:50%;
+  background:rgba(255,255,255,.95);
+  box-shadow:0 10px 30px rgba(0,0,0,.26);
+  z-index:3;
+  transition:transform .18s ease, background .18s ease, box-shadow .18s ease;
+  pointer-events:none;
+}
+
+.portfolio-play-icon::before{
+  content:"";
+  position:absolute;
+  left:52%;
+  top:50%;
+  transform:translate(-42%,-50%);
+  width:0;
+  height:0;
+  border-top:9px solid transparent;
+  border-bottom:9px solid transparent;
+  border-left:15px solid #0b0f0d;
+}
+
+.portfolio-video-launch:hover .portfolio-play-icon,
+.portfolio-video-launch:focus-visible .portfolio-play-icon{
+  transform:translate(-50%,-50%) scale(1.08);
+  background:#fff;
+  box-shadow:0 14px 34px rgba(0,0,0,.32);
+}
+
+.portfolio-video-launch:hover .portfolio-video-poster{
+  filter:brightness(.94);
+}
+
+.portfolio-video-launch:focus-visible{
+  outline:3px solid var(--yellow);
+  outline-offset:-3px;
+}
+
+/* Modal: size is controlled by viewport HEIGHT as well as width,
+   so a 9:16 player never overflows a phone screen. */
+.portfolio-video-modal{
+  border:0;
+  padding:0;
+  margin:auto;
+  max-width:none;
+  width:auto;
+  background:transparent;
+  overflow:visible;
+}
+
+.portfolio-video-modal::backdrop{
+  background:rgba(3,5,4,.86);
+  backdrop-filter:blur(7px);
+}
+
+.portfolio-video-modal-card{
+  width:min(420px,49.5vh,calc(100vw - 28px));
+  max-width:calc(100vw - 28px);
+  padding:48px 10px 10px;
+  border-radius:26px;
+  background:#0b0f0d;
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 30px 90px rgba(0,0,0,.55);
+  position:relative;
+}
+
+.portfolio-video-modal-head{
+  position:absolute;
+  left:14px;
+  right:10px;
+  top:9px;
+  height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  color:white;
+}
+
+.portfolio-video-modal-head strong{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:13px;
+  letter-spacing:-.01em;
+}
+
+.portfolio-video-close{
+  flex:0 0 auto;
+  width:32px;
+  height:32px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+  color:white;
+  font-size:24px;
+  line-height:1;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+}
+
+.portfolio-video-close:hover{
+  background:rgba(255,255,255,.16);
+}
+
+.portfolio-video-modal-frame{
+  width:100%;
+  aspect-ratio:9 / 16;
+  overflow:hidden;
+  border-radius:18px;
+  background:#000;
+}
+
+.portfolio-video-modal-frame iframe{
+  display:block;
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  border:0;
+  background:#000;
+}
+
+@media (max-width:640px){
+  .portfolio-play-icon{
+    width:58px;
+    height:58px;
+  }
+
+  .portfolio-video-modal-card{
+    width:min(49.5vh,calc(100vw - 18px));
+    max-width:calc(100vw - 18px);
+    padding:46px 8px 8px;
+    border-radius:22px;
+  }
+
+  .portfolio-video-modal-frame{
+    border-radius:16px;
+  }
+}
+
+/* =========================================================
+   V12 FINAL OVERRIDE — TRUE CENTERED VIDEO MODAL + THUMBNAILS
+   ========================================================= */
+
+/* Ensure every poster truly fills the 9:16 mockup. This overrides
+   the older .phone-media img { max-height:420px } rule. */
+.direct-video-frame .portfolio-video-launch,
+.sleep-featured .compare-player .portfolio-video-launch,
+.phone-media .direct-video-frame .portfolio-video-launch{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:block !important;
+  overflow:hidden !important;
+  border:0 !important;
+  border-radius:inherit !important;
+  background:#000 !important;
+}
+
+.direct-video-frame .portfolio-video-poster,
+.sleep-featured .compare-player .portfolio-video-poster,
+.phone-media .direct-video-frame .portfolio-video-poster{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  min-width:100% !important;
+  min-height:100% !important;
+  max-width:none !important;
+  max-height:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:block !important;
+  object-fit:cover !important;
+  object-position:50% 50% !important;
+  filter:none !important;
+  transform:none !important;
+}
+
+/* One play button, always dead-center in the poster. */
+.direct-video-frame .portfolio-play-icon,
+.sleep-featured .compare-player .portfolio-play-icon,
+.phone-media .direct-video-frame .portfolio-play-icon{
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  right:auto !important;
+  bottom:auto !important;
+  transform:translate(-50%,-50%) !important;
+  margin:0 !important;
+  width:62px !important;
+  height:62px !important;
+  border-radius:50% !important;
+  z-index:10 !important;
+}
+
+/* The dialog itself becomes a transparent full-screen centering layer.
+   This avoids browser/dialog UA positioning putting it at the left edge. */
+dialog.portfolio-video-modal[open]{
+  position:fixed !important;
+  inset:0 !important;
+  width:100vw !important;
+  height:100dvh !important;
+  max-width:none !important;
+  max-height:none !important;
+  margin:0 !important;
+  padding:20px !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:transparent !important;
+  border:0 !important;
+  overflow:hidden !important;
+}
+
+/* Keep the actual 9:16 player centered and fully inside the viewport. */
+dialog.portfolio-video-modal[open] .portfolio-video-modal-card{
+  position:relative !important;
+  inset:auto !important;
+  flex:0 0 auto !important;
+  width:min(420px,45dvh,calc(100vw - 40px)) !important;
+  max-width:calc(100vw - 40px) !important;
+  max-height:calc(100dvh - 40px) !important;
+  margin:0 !important;
+  padding:48px 10px 10px !important;
+  box-sizing:border-box !important;
+  transform:none !important;
+}
+
+dialog.portfolio-video-modal[open] .portfolio-video-modal-frame{
+  position:relative !important;
+  width:100% !important;
+  aspect-ratio:9 / 16 !important;
+  height:auto !important;
+  max-height:calc(100dvh - 108px) !important;
+  margin:0 auto !important;
+  overflow:hidden !important;
+}
+
+dialog.portfolio-video-modal[open] .portfolio-video-modal-frame iframe{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  margin:0 !important;
+  border:0 !important;
+  transform:none !important;
+}
+
+@media (max-width:640px){
+  dialog.portfolio-video-modal[open]{
+    padding:12px !important;
+  }
+
+  dialog.portfolio-video-modal[open] .portfolio-video-modal-card{
+    width:min(92vw,43dvh) !important;
+    max-width:92vw !important;
+    max-height:calc(100dvh - 24px) !important;
+    padding:46px 8px 8px !important;
+  }
+
+  .direct-video-frame .portfolio-play-icon,
+  .sleep-featured .compare-player .portfolio-play-icon,
+  .phone-media .direct-video-frame .portfolio-play-icon{
+    width:58px !important;
+    height:58px !important;
+  }
+}
