@@ -167,47 +167,47 @@ document.querySelectorAll('iframe[data-drive-file-id]').forEach((frame) => {
 })();
 
 
-// V11 clean portfolio video player.
-// The phone mockups show a static poster and ONE play button.
-// Google Drive /preview is created only inside this large modal.
-const portfolioVideoModal = document.getElementById('portfolio-video-modal');
-const portfolioVideoFrame = document.getElementById('portfolio-video-modal-iframe');
-const portfolioVideoTitle = document.getElementById('portfolio-video-modal-title');
-const portfolioVideoClose = portfolioVideoModal?.querySelector('.portfolio-video-close');
 
-function openPortfolioVideo(button) {
-  if (!portfolioVideoModal || !portfolioVideoFrame) return;
 
-  const fileId = button.dataset.driveFileId;
-  const title = button.dataset.videoTitle || 'Portfolio video';
-  if (!fileId) return;
+// V17 local 1080p portfolio video player.
+// MP4 files are NOT requested on initial page load. The source is attached only after Play is clicked.
+(() => {
+  const videos = Array.from(document.querySelectorAll('.local-portfolio-video'));
 
-  portfolioVideoTitle.textContent = title;
-  portfolioVideoFrame.title = title;
-  // autoplay=1 removes the need for another click on browsers that allow it.
-  // If the browser blocks autoplay, Google Drive simply shows its normal player in the modal.
-  portfolioVideoFrame.src = `https://drive.google.com/file/d/${fileId}/preview?autoplay=1`;
+  const pauseOthers = (current) => {
+    videos.forEach((video) => {
+      if (video !== current && !video.paused) video.pause();
+    });
+  };
 
-  portfolioVideoModal.showModal();
-  document.body.classList.add('modal-open');
-}
+  document.querySelectorAll('.local-video-play').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const screen = button.closest('.local-video-screen');
+      const video = screen?.querySelector('.local-portfolio-video');
+      if (!video) return;
 
-function closePortfolioVideo() {
-  if (!portfolioVideoModal || !portfolioVideoFrame) return;
-  portfolioVideoModal.close();
-  portfolioVideoFrame.src = '';
-  document.body.classList.remove('modal-open');
-}
+      pauseOthers(video);
 
-document.querySelectorAll('.portfolio-video-launch').forEach((button) => {
-  button.addEventListener('click', () => openPortfolioVideo(button));
-});
+      if (!video.dataset.loaded) {
+        video.src = video.dataset.src;
+        video.controls = true;
+        video.dataset.loaded = 'true';
+        video.load();
+      }
 
-portfolioVideoClose?.addEventListener('click', closePortfolioVideo);
-portfolioVideoModal?.addEventListener('click', (event) => {
-  if (event.target === portfolioVideoModal) closePortfolioVideo();
-});
-portfolioVideoModal?.addEventListener('cancel', (event) => {
-  event.preventDefault();
-  closePortfolioVideo();
-});
+      button.classList.add('is-hidden');
+      screen.classList.add('is-loaded');
+
+      try {
+        await video.play();
+      } catch (error) {
+        // Native controls remain available if browser autoplay policy blocks play().
+        button.classList.remove('is-hidden');
+      }
+    });
+  });
+
+  videos.forEach((video) => {
+    video.addEventListener('play', () => pauseOthers(video));
+  });
+})();
