@@ -130,27 +130,9 @@ if (emailButton) {
 }
 
 
-// YouTube portfolio embeds.
-// Every portfolio video uses the canonical /embed/ URL rather than /shorts/.
-// This keeps the 9:16 player consistent inside the portfolio on desktop/mobile.
-document.querySelectorAll('iframe[data-youtube-video-id]').forEach((frame) => {
-  const videoId = frame.dataset.youtubeVideoId?.trim();
-  if (!videoId) return;
-
-  const params = new URLSearchParams({
-    playsinline: '1',
-    rel: '0'
-  });
-
-  const canonicalSrc =
-    'https://www.youtube.com/embed/' + encodeURIComponent(videoId) +
-    '?' + params.toString();
-
-  if (frame.getAttribute('src') !== canonicalSrc) {
-    frame.setAttribute('src', canonicalSrc);
-  }
-
-  // Keep embeds lightweight and compatible with GitHub Pages / normal HTTPS hosts.
+// Google Drive portfolio embeds.
+// Keep the /preview URLs from index.html unchanged.
+document.querySelectorAll('iframe[data-drive-file-id]').forEach((frame) => {
   frame.loading = 'lazy';
   frame.referrerPolicy = 'strict-origin-when-cross-origin';
 });
