@@ -555,3 +555,182 @@ var(--paper);background-size:48px 48px}
     max-width:calc(100vw - 34px) !important;
   }
 }
+
+
+/* =========================================================
+   MOBILE V10 — NATIVE VIEWPORT / NO HORIZONTAL OVERFLOW
+   This block intentionally leaves Google Drive video sizing alone.
+   ========================================================= */
+html,
+body{
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  margin:0 !important;
+  overflow-x:clip !important;
+  zoom:1 !important;
+}
+
+body,
+.site-header,
+main,
+main > section,
+.site-footer{
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+}
+
+.container,
+.hero-grid,
+.two-col,
+.service-grid,
+.project-grid,
+.workflow-grid,
+.contact-card,
+.project-card,
+.service-card,
+.project-media,
+.project-body,
+.section-heading,
+.about-copy,
+.tools-wrap{
+  min-width:0 !important;
+  max-width:100% !important;
+}
+
+img,
+iframe,
+video,
+svg{
+  max-width:100% !important;
+}
+
+@media (max-width:720px){
+  .container{
+    width:calc(100% - 28px) !important;
+    max-width:calc(100% - 28px) !important;
+    margin-inline:auto !important;
+  }
+
+  .hero-grid,
+  .two-col,
+  .service-grid,
+  .project-grid,
+  .workflow-grid,
+  .contact-card{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) !important;
+    width:100% !important;
+  }
+
+  .hero{
+    padding-top:58px !important;
+  }
+
+  .hero h1{
+    font-size:clamp(44px,13vw,58px) !important;
+    line-height:.91 !important;
+    max-width:100% !important;
+    overflow-wrap:anywhere !important;
+  }
+
+  .hero-lead,
+  .about-copy,
+  .project-body p,
+  .service-card p,
+  .workflow-step p,
+  .contact-card p{
+    max-width:100% !important;
+    overflow-wrap:anywhere !important;
+  }
+
+  .section-heading,
+  .section-heading.compact{
+    width:100% !important;
+    max-width:100% !important;
+  }
+
+  .section-heading h2{
+    font-size:clamp(34px,10vw,48px) !important;
+    line-height:.98 !important;
+    max-width:100% !important;
+    overflow-wrap:anywhere !important;
+  }
+
+  .profile-card{
+    width:min(360px,88vw) !important;
+    max-width:100% !important;
+    transform:none !important;
+    margin-inline:auto !important;
+  }
+
+  .hero-visual{
+    width:100% !important;
+    max-width:100% !important;
+    overflow:hidden !important;
+  }
+
+  .floating-tag{
+    max-width:42vw !important;
+    white-space:nowrap !important;
+  }
+
+  .service-card,
+  .project-card,
+  .workflow-step,
+  .contact-card{
+    width:100% !important;
+    max-width:100% !important;
+  }
+
+  .service-card img{
+    width:100% !important;
+    height:auto !important;
+    aspect-ratio:16 / 10 !important;
+    object-fit:cover !important;
+  }
+
+  .stats-grid{
+    width:100% !important;
+    grid-template-columns:1fr !important;
+  }
+
+  .contact-card{
+    padding:32px 22px !important;
+  }
+
+  .contact-actions,
+  .contact-actions .btn{
+    width:100% !important;
+  }
+
+  .ticker,
+  .ticker-track{
+    width:100% !important;
+    max-width:100% !important;
+    overflow:hidden !important;
+  }
+}
+
+@media (max-width:420px){
+  .container{
+    width:calc(100% - 24px) !important;
+    max-width:calc(100% - 24px) !important;
+  }
+
+  .section-pad{
+    padding:58px 0 !important;
+  }
+
+  .hero h1{
+    font-size:clamp(42px,12.5vw,52px) !important;
+  }
+
+  .project-body,
+  .project-card.featured .project-body,
+  .sleep-featured .project-body{
+    padding-left:20px !important;
+    padding-right:20px !important;
+  }
+}

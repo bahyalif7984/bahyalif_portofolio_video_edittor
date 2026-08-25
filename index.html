@@ -3,77 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <script>
-    // Reversible mobile-layout rescue.
-    // Important: Chrome DevTools device emulation can temporarily make a desktop
-    // browser look like a phone. When emulation is closed, every rescue class and
-    // inline property is removed again so the desktop layout returns cleanly.
-    (() => {
-      const root = document.documentElement;
-      let resizeFrame = 0;
+  <!-- Native responsive layout: no JS zoom/viewport rescue needed. -->
 
-      const clearMobileRescue = () => {
-        root.classList.remove("force-mobile", "desktop-mobile-request");
-        root.style.removeProperty("--mobile-device-width");
-        root.style.removeProperty("--mobile-rescue-zoom");
-      };
-
-      const syncMobileLayout = () => {
-        const ua = navigator.userAgent || "";
-        const uaMobile = navigator.userAgentData?.mobile === true ||
-          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-        const touchDevice = navigator.maxTouchPoints > 0 || "ontouchstart" in window;
-        const sw = Number(window.screen?.width || 0);
-        const sh = Number(window.screen?.height || 0);
-        const shortSide = sw && sh ? Math.min(sw, sh) : 9999;
-        const physicalMobile = uaMobile || (touchDevice && shortSide <= 900);
-
-        // Desktop again (including after closing DevTools responsive mode):
-        // fully undo the mobile rescue instead of leaving a sticky class behind.
-        if (!physicalMobile) {
-          clearMobileRescue();
-          return;
-        }
-
-        root.classList.add("force-mobile");
-
-        const layoutWidth = Math.max(
-          root.clientWidth || 0,
-          window.innerWidth || 0,
-          window.visualViewport?.width || 0
-        );
-        const physicalCssWidth = shortSide < 900 ? shortSide : 0;
-
-        // Only use the desktop-site rescue on a real small touch screen whose
-        // layout viewport is much wider than its physical CSS width.
-        if (physicalCssWidth > 0 && layoutWidth > physicalCssWidth * 1.35) {
-          const zoom = Math.min(3.5, Math.max(1, layoutWidth / physicalCssWidth));
-          root.classList.add("desktop-mobile-request");
-          root.style.setProperty("--mobile-device-width", physicalCssWidth + "px");
-          root.style.setProperty("--mobile-rescue-zoom", String(zoom));
-        } else {
-          root.classList.remove("desktop-mobile-request");
-          root.style.removeProperty("--mobile-device-width");
-          root.style.removeProperty("--mobile-rescue-zoom");
-        }
-      };
-
-      const scheduleSync = () => {
-        cancelAnimationFrame(resizeFrame);
-        resizeFrame = requestAnimationFrame(syncMobileLayout);
-      };
-
-      syncMobileLayout();
-      window.addEventListener("pageshow", syncMobileLayout);
-      window.addEventListener("resize", scheduleSync, { passive: true });
-      window.visualViewport?.addEventListener("resize", scheduleSync, { passive: true });
-      window.addEventListener("orientationchange", () => setTimeout(syncMobileLayout, 100));
-    })();
-  </script>
   <meta name="description" content="Portfolio of Muhamad Bahy Alif — Video Editor and Social Media Content Designer based in Indonesia.">
   <meta name="theme-color" content="#0b0f0d">
   <title>Muhamad Bahy Alif — Video Editor & Social Media Content Designer</title>
-  <link rel="stylesheet" href="styles.css?v=recovered-google-drive-20260825">
+  <link rel="stylesheet" href="styles.css?v=20260825-mobile-v10">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -361,6 +296,6 @@
     </div>
   </dialog>
 
-  <script src="script.js?v=recovered-google-drive-20260825"></script>
+  <script src="script.js?v=20260825-mobile-v10"></script>
 </body>
 </html>
